@@ -23,7 +23,7 @@ public class UserRepo implements Repo<Integer, User> {
 
     @Override
     @SneakyThrows
-    public User save(User entity) {
+    public void save(User entity) {
 
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(SAVE_SQL, RETURN_GENERATED_KEYS)) {
@@ -34,9 +34,8 @@ public class UserRepo implements Repo<Integer, User> {
 
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
             generatedKeys.next();
-            entity.setId(generatedKeys.getObject("id", Integer.class));
 
-            return entity;
+            entity.setId(generatedKeys.getObject("id", Integer.class));
         }
     }
 

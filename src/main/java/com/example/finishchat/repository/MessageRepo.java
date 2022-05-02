@@ -8,6 +8,9 @@ import lombok.SneakyThrows;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Types;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
@@ -23,19 +26,18 @@ public class MessageRepo implements Repo<Long, Message> {
 
     @Override
     @SneakyThrows
-    public Message save(Message entity) {
+    public void save(Message entity) {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(SAVE_SQL, RETURN_GENERATED_KEYS)) {
 
             preparedStatement.setObject(1, entity.getText());
-            preparedStatement.setObject(2, entity.getCreateAt());
+            preparedStatement.setObject(2, LocalDate.now());
+
             preparedStatement.executeUpdate();
+
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
             generatedKeys.next();
-            entity.setId(generatedKeys.getObject("id", Long.class));
-            return entity;
-
-
+            entity.setId(generatedKeys.getObject("id", Integer.class));
         }
     }
 

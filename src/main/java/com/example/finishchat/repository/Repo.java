@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public interface Repo <K, T>{
 
-    T save(T entity);
+    void save(T entity);
 
     List<T> findAll();
 

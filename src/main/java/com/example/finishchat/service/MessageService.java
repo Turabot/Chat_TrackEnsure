@@ -23,8 +23,6 @@ public class MessageService {
     public void create(MessageDto messageDto) {
         Message message = createUserMapper.mapFrom(messageDto);
         userRepo.save(message);
-
-//        return userEntity.getUsername();
     }
 
     public List<String> getMessages() {

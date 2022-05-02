@@ -1,9 +1,7 @@
 package com.example.finishchat.mapper;
 
 import com.example.finishchat.dto.MessageDto;
-import com.example.finishchat.dto.UserDto;
 import com.example.finishchat.entity.Message;
-import com.example.finishchat.entity.User;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;

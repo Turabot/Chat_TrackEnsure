@@ -1,8 +1,8 @@
 package com.example.finishchat.controller;
 
 import com.example.finishchat.dto.UserDto;
+import com.example.finishchat.service.MessageService;
 import com.example.finishchat.service.UserService;
-import com.example.finishchat.util.ConnectionManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,14 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.util.List;
 
 @WebServlet(name = "userLogin", urlPatterns = {"/userLogin"})
 public class LoginController extends HttpServlet {
 
     private final UserService userService = UserService.getInstance();
+    private final MessageService messageService = MessageService.getInstance();
 
     HttpSession session;
 
@@ -51,22 +50,11 @@ public class LoginController extends HttpServlet {
             out.println("<br><br>");
             out.println("<textarea  readonly=\"readonly\"   name=\"txtMessage\" rows=\"20\" cols=\"60\">");
 
+                List<String> messages = messageService.getMessages();
 
-            // Retrieve all messages from database
-
-            try(Connection connection = ConnectionManager.get();
-                Statement st = connection.createStatement()) {
-
-                ResultSet rs = st.executeQuery("SELECT * FROM hello_message");
-
-                while (rs.next()) {
-                    String messages = rs.getString(1) + " >> " + rs.getString(2);
-                    out.println(messages);
+                for (String message : messages) {
+                    out.println(message);
                 }
-
-            } catch (Exception ex1) {
-                System.err.println(ex1.getMessage());
-            }
 
             out.println("</textarea>");
             out.println("<hr>");
@@ -93,9 +81,6 @@ public class LoginController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-
-//        processRequest(request, response);
     }
 
     @Override
@@ -105,12 +90,11 @@ public class LoginController extends HttpServlet {
 
         UserDto build = UserDto.builder().name(user).build();
         userService.create(build);
-        System.out.println(user + " This USer you");
         processRequest(request, response);
     }
 
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
 }

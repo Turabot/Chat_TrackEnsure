@@ -1,5 +1,7 @@
 package com.example.finishchat.controller;
 
+import com.example.finishchat.dto.MessageDto;
+import com.example.finishchat.service.MessageService;
 import com.example.finishchat.util.ConnectionManager;
 
 import javax.servlet.ServletException;
@@ -13,18 +15,21 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+
 @WebServlet(name = "chatWindow", urlPatterns = {"/chatWindow"})
 public class ChatController extends HttpServlet {
 
     String username, tempName;
     HttpSession session;
 
+    private final MessageService messageService = MessageService.getInstance();
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         try (PrintWriter out = response.getWriter()) {
 
-            String message = request.getParameter("txtMsg");  //Extract Message
-            String username = session.getAttribute("username").toString(); //Extract Username
+            String message = request.getParameter("txtMsg");
+            String username = session.getAttribute("username").toString();
 
 
             out.println("<html>  <head> <body bgcolor=\"#6495ED\"> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"> <title>Chat Room</title>  </head>");
@@ -58,17 +63,15 @@ public class ChatController extends HttpServlet {
                     out.println(messages);
                 }
             }
-            // Retrieve all messages from database
 
             try(Connection connection = ConnectionManager.get();
                 Statement st = connection.createStatement()) {
 
                 ResultSet rs = st.executeQuery("SELECT * FROM hello_message");
 
-                // Print all retrieved messages
                 while (rs.next()) {
                     String messages = rs.getString(1) + " >> " + rs.getString(2);
-
+//                    String messages1 = messageService.getMessages();
                     out.println(messages);
                 }
 
@@ -82,12 +85,14 @@ public class ChatController extends HttpServlet {
             out.println("</body>");
             out.println("</html>");
         }
-
-
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String message = req.getParameter("txtMsg");
+        MessageDto build = MessageDto.builder().text(message).build();
+        messageService.create(build);
+
         session = req.getSession();
 
         if (username != null) {
@@ -99,8 +104,6 @@ public class ChatController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String message = req.getParameter("txtMsg");
-        System.out.println(message + " This you message");
         super.doPost(req, resp);
     }
 

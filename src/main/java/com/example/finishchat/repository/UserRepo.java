@@ -69,6 +69,7 @@ public class UserRepo implements Repo<Integer, User> {
 
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(EXIST_BY_USER_NAME)) {
+            preparedStatement.setString(1, userName);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 isUserName = resultSet.getInt(1) > 0;

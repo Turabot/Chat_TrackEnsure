@@ -31,7 +31,7 @@ public class LoginController extends HttpServlet {
                 .username(name)
                 .build();
 
-        if (userService.existByNickName(name)) {
+        if (!userService.existByNickName(name)) {
             userService.create(userDto);
         }
 

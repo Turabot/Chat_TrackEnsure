@@ -2,16 +2,22 @@
 <html>
 <head>
     <title>Title</title>
+    <style>
+        <%@include file="/WEB-INF/css/login.css" %>
+    </style>
 </head>
 <body>
 
-    <form action="/login" method="post">
-        <label for="name"> Name:
-            <input type="text" name="name" id="name">
-        </label>
+    <div class="container">
+        <form action="/login" method="post">
+            <div class="container">
+                <label for="name"> Name:
+                    <input type="text" name="name" id="name">
+                </label>
 
-        <button type="submit">Send</button>
-    </form>
-
+                <button type="submit">Send</button>
+            </div>
+        </form>
+    </div>
 </body>
 </html>

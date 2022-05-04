@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+import static com.example.finishchat.constant.Constant.*;
+
 @WebServlet(urlPatterns = "/message")
 public class ChatController extends HttpServlet {
 
@@ -21,16 +23,16 @@ public class ChatController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Message> andUserName = messageService.getMessagesAndUserName();
-        req.setAttribute("messages", andUserName);
+        req.setAttribute(MESSAGES, andUserName);
         req.getRequestDispatcher("/WEB-INF/message.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User user = (User) req.getSession().getAttribute("users");
+        User user = (User) req.getSession().getAttribute(USERS);
 
         MessageDto build = MessageDto.builder()
-                .text(req.getParameter("txtMsg"))
+                .text(req.getParameter(TXT_MSG))
                 .user(user)
                 .build();
 

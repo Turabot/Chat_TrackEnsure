@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+import static com.example.finishchat.constant.Constant.USERS;
+import static com.example.finishchat.constant.Constant.USER_NAME;
+
 @WebServlet(urlPatterns = "/login")
 public class LoginController extends HttpServlet {
 
@@ -39,8 +42,8 @@ public class LoginController extends HttpServlet {
 
         HttpSession session = req.getSession();
 
-        session.setAttribute("users", user);
-        session.setAttribute("userName", userDto.getUsername());
+        session.setAttribute(USERS, user);
+        session.setAttribute(USER_NAME, userDto.getUsername());
 
         resp.sendRedirect("/message");
     }

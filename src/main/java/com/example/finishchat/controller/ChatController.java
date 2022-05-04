@@ -1,6 +1,8 @@
 package com.example.finishchat.controller;
 
 import com.example.finishchat.dto.MessageDto;
+import com.example.finishchat.entity.Message;
+import com.example.finishchat.entity.User;
 import com.example.finishchat.service.MessageService;
 
 import javax.servlet.ServletException;
@@ -9,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
 @WebServlet(urlPatterns = "/message")
@@ -19,24 +20,22 @@ public class ChatController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<Message> andUserName = messageService.getMessagesAndUserName();
+        req.setAttribute("messages", andUserName);
         req.getRequestDispatcher("/WEB-INF/message.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String message = req.getParameter("txtMsg");
+        User user = (User) req.getSession().getAttribute("users");
 
         MessageDto build = MessageDto.builder()
-                .text(message)
+                .text(req.getParameter("txtMsg"))
+                .user(user)
                 .build();
+
         messageService.create(build);
 
-        PrintWriter writer = resp.getWriter();
-        List<String> messages = messageService.getMessages();
-        for (String s : messages) {
-            System.out.println(s);
-            writer.println(s);
-        }
         doGet(req, resp);
     }
 }

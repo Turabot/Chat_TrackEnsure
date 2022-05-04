@@ -15,6 +15,7 @@ public class MessageMapper implements Mapper<MessageDto, Message> {
     public Message mapFrom(MessageDto object) {
         return Message.builder()
                 .text(object.getText())
+                .user(object.getUser())
                 .build();
     }
 

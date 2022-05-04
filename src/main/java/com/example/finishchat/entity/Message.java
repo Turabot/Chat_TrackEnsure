@@ -13,7 +13,8 @@ import java.time.LocalDateTime;
 @Builder
 public class Message {
 
-    private Integer id;
+    private Long id;
     private String text;
     private LocalDateTime createAt;
+    private User user;
 }

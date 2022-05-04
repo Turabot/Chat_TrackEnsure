@@ -5,7 +5,6 @@ import com.example.finishchat.entity.Message;
 import com.example.finishchat.mapper.MessageMapper;
 import com.example.finishchat.repository.MessageRepo;
 import lombok.NoArgsConstructor;
-import lombok.SneakyThrows;
 
 import java.util.Collections;
 import java.util.List;
@@ -17,18 +16,18 @@ public class MessageService {
 
     private static final MessageService INSTANCE = new MessageService();
 
-    private final MessageRepo userRepo = MessageRepo.getInstance();
+    private final MessageRepo messageRepo = MessageRepo.getInstance();
     private final MessageMapper createUserMapper = MessageMapper.getInstance();
 
     public void create(MessageDto messageDto) {
         Message message = createUserMapper.mapFrom(messageDto);
-        userRepo.save(message);
+        messageRepo.save(message);
     }
 
-    public List<String> getMessages() {
-        List<String> allMessage = userRepo.findAllMessage();
-        Collections.reverse(allMessage);
-        return allMessage;
+    public List<Message> getMessagesAndUserName() {
+        List<Message> allMessageTo = messageRepo.findAllMessageTo();
+        Collections.reverse(allMessageTo);
+        return allMessageTo;
     }
 
     public static MessageService getInstance() {

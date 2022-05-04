@@ -23,6 +23,15 @@ public class UserService {
         userRepo.save(userEntity);
     }
 
+    public User getByNickName(String userName) {
+        return userRepo.findUserByUserName(userName);
+    }
+
+    public Boolean existByNickName(String nickName) {
+        return userRepo.existByUserName(nickName);
+    }
+
+
     public static UserService getInstance() {
         return INSTANCE;
     }
